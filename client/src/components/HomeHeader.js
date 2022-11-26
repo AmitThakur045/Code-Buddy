@@ -22,7 +22,7 @@ const HomeHeader = () => {
   return (
     <div className="flex text-homeHeaderSecondary justify-between sm:justify-start sm:space-x-16 px-8 sm:pl-24 py-10 w-full font-semibold text-[1.2rem]">
       <div className="cursor-pointer text-homeHeaderPrimary text-[16px] sm:text-[19px]">
-        Chat Buddy
+        Code Buddy
       </div>
 
       <div

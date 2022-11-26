@@ -18,7 +18,7 @@ const Sidebar = ({ users, roomName, setOpenChat, isWeb, setIsWeb }) => {
       <div className="flex-[0.95] flex flex-col text-gray-600 dark:text-white pl-4 pr-1 py-3 justify-between">
         <div className="">
           <div className=" border-b-[1px] border-[#313131] pb-4">
-            <h1 className="font-bold text-[2rem]">Chat Buddy</h1>
+            <h1 className="font-bold text-[2rem]">Code Buddy</h1>
             <div className="flex space-x-3 items-center">
               <p className="text-blue-800 dark:text-[#1d90f5]">
                 Room - {roomName}
