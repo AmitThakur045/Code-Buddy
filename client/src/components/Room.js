@@ -342,6 +342,8 @@ const Room = () => {
     setJs(value);
   };
 
+  // this useEffect will trigger for every
+  // changes in htmlValue, cssValue, jsValue
   useEffect(() => {
     const timeout = setTimeout(() => {
       setCode(`
@@ -362,7 +364,7 @@ const Room = () => {
         <div className="w-full h-screen flex flex-col bg-[#434343] overflow-hidden relative">
           <Helmet>
             <meta charSet="utf-8" />
-            <title>Chat Buddy | {roomName}</title>
+            <title>Code Buddy | {roomName}</title>
           </Helmet>
           <audio ref={messageAlertPlayer} src={NotificationSound} />
           <audio ref={joinAlertPlayer} src={JoinSound} />
@@ -414,8 +416,8 @@ const Room = () => {
           />
           <hr />
           {isWeb ? (
-            <div className="w-full h-screen flex flex-col">
-              <div className="flex-[0.5] flex flex-row w-full h-full grid-cols-3">
+            <div className="w-full h-screen flex flex-col space-y-3">
+              <div className="flex-[0.5] flex md:flex-row flex-col w-full h-full grid-cols-3">
                 <div className="col-span-1">
                   <CodeEditor
                     displayName="HTML"

@@ -31,7 +31,11 @@ export default function CodeEditor(prop) {
   const [width, setWidth] = useState(window.innerWidth / 3);
 
   function handleSizeChange() {
-    setWidth(window.innerWidth / 3);
+    if (window.innerWidth >= 768) {
+      setWidth(window.innerWidth / 3);
+    } else {
+      setWidth(window.innerWidth);
+    }
   }
 
   useEffect(() => {

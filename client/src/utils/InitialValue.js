@@ -52,16 +52,15 @@ button {
 body {
   background: #000;
   color : white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 button {
-  position: absolute;
-  
-  left : 42.5vw;
-  top : 42%;
-  
   height: 5em;
   width: 15em;
+  margin-top: 6%;
   
   background: #444;
   background: linear-gradient(top, #555, #333);

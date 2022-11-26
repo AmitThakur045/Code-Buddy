@@ -27,7 +27,7 @@ const Sidebar = ({ users, roomName, setOpenChat, isWeb, setIsWeb }) => {
           </div>
           <div className="py-3 space-y-3">
             <h2 className="font-semibold text-[18px]">Connected</h2>
-            <div className="grid grid-cols-3 gap-1 h-[57vh] overflow-y-auto scrollbar-hide">
+            <div className="grid grid-cols-3 gap-1 h-[44vh] overflow-y-auto scrollbar-hide">
               {users.map((user, i) => (
                 <div
                   className="flex flex-col items-center space-y-1 h-[5rem]"
@@ -79,16 +79,17 @@ const Sidebar = ({ users, roomName, setOpenChat, isWeb, setIsWeb }) => {
           </button>
         </div>
       </div>
-      <div className="flex-[0.05] flex items-center">
+      <div
+        onClick={() => setOpenSidebar((prev) => !prev)}
+        className="flex-[0.05] flex items-center cursor-pointer"
+      >
         {openSidebar ? (
           <BsChevronCompactLeft
-            onClick={() => setOpenSidebar(false)}
             size={25}
             className="text-white cursor-pointer"
           />
         ) : (
           <BsChevronCompactRight
-            onClick={() => setOpenSidebar(true)}
             size={25}
             className="text-white cursor-pointer"
           />

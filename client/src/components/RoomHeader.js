@@ -242,7 +242,7 @@ const RoomHeader = ({
   };
 
   return (
-    <div className="flex md:flex-row flex-col text-[#5b5b5b] lg:space-x-16 md:space-x-4 space-y-3 md:space-y-0 px-8 lg:pl-24 py-4 w-full font-semibold text-[1.2rem] bg-white  dark:bg-[#2c2e3f]">
+    <div className="flex md:flex-row flex-col text-[#5b5b5b] lg:space-x-8 md:space-x-4 space-y-3 md:space-y-0 px-8 lg:pl-10 py-4 w-full font-semibold text-[1.2rem] bg-white  dark:bg-[#2c2e3f]">
       {!isWeb && (
         <div className="md:w-[10rem] w-full">
           <FormControl fullWidth>
