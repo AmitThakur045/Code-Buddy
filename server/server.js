@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(
   cors({
     allowedHeaders: ["Content-Type"],
-    origin: [process.env.CLIENT_URL],
+    origin: "*",
   })
 );
 
