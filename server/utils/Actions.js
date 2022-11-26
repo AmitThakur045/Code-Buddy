@@ -21,4 +21,7 @@ export const ACTIONS = {
   RECEIVE_MESSAGE: "receice-message",
   TYPING: "typing",
   TYPED: "typed",
+  HTML_CHANGE: "html-change",
+  CSS_CHANGE: "css-change",
+  JS_CHANGE: "js-change",
 };

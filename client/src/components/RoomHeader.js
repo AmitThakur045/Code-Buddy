@@ -80,6 +80,7 @@ const RoomHeader = ({
   running,
   setSaving,
   saving,
+  isWeb,
 }) => {
   const { themeMode, setThemeMode } = React.useContext(ThemeContext);
   const [soundToggle, setSoundToggle] = useRecoilState(sound);
@@ -216,49 +217,55 @@ const RoomHeader = ({
   };
 
   return (
-    <div className="flex md:flex-row flex-col text-[#5b5b5b] lg:space-x-16 md:space-x-4 space-y-3 md:space-y-0 px-8 lg:pl-24 py-10 w-full font-semibold text-[1.2rem] bg-white  dark:bg-[#2c2e3f]">
+    <div className="flex md:flex-row flex-col text-[#5b5b5b] lg:space-x-16 md:space-x-4 space-y-3 md:space-y-0 px-8 lg:pl-24 py-4 w-full font-semibold text-[1.2rem] bg-white  dark:bg-[#2c2e3f]">
+      {!isWeb && (
+        <div className="md:w-[10rem] w-full">
+          <FormControl fullWidth>
+            <InputLabel
+              sx={{ color: themeMode === "dark" ? "white" : "" }}
+              id="demo-simple-select-label"
+            >
+              Choose Language
+            </InputLabel>
+            {themeMode === "dark" ? (
+              <Select
+                sx={style}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={language}
+                label="Choose Language"
+                onChange={handleLanguageChange}
+              >
+                {langauges.map((lang, i) => (
+                  <MenuItem key={i} value={lang[1]}>
+                    {lang[0]}
+                  </MenuItem>
+                ))}
+              </Select>
+            ) : (
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={language}
+                label="Choose Language"
+                onChange={handleLanguageChange}
+              >
+                {langauges.map((lang, i) => (
+                  <MenuItem key={i} value={lang[1]}>
+                    {lang[0]}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          </FormControl>
+        </div>
+      )}
       <div className="md:w-[10rem] w-full">
         <FormControl fullWidth>
           <InputLabel
             sx={{ color: themeMode === "dark" ? "white" : "" }}
-            id="demo-simple-select-label">
-            Choose Language
-          </InputLabel>
-          {themeMode === "dark" ? (
-            <Select
-              sx={style}
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={language}
-              label="Choose Language"
-              onChange={handleLanguageChange}>
-              {langauges.map((lang, i) => (
-                <MenuItem key={i} value={lang[1]}>
-                  {lang[0]}
-                </MenuItem>
-              ))}
-            </Select>
-          ) : (
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={language}
-              label="Choose Language"
-              onChange={handleLanguageChange}>
-              {langauges.map((lang, i) => (
-                <MenuItem key={i} value={lang[1]}>
-                  {lang[0]}
-                </MenuItem>
-              ))}
-            </Select>
-          )}
-        </FormControl>
-      </div>
-      <div className="md:w-[10rem] w-full">
-        <FormControl fullWidth>
-          <InputLabel
-            sx={{ color: themeMode === "dark" ? "white" : "" }}
-            id="demo-simple-select-label">
+            id="demo-simple-select-label"
+          >
             Choose Theme
           </InputLabel>
           {themeMode === "dark" ? (
@@ -268,7 +275,8 @@ const RoomHeader = ({
               id="demo-simple-select"
               value={theme}
               label="Choose Theme"
-              onChange={(e) => setTheme(e.target.value)}>
+              onChange={(e) => setTheme(e.target.value)}
+            >
               {themes.map((theme, i) => (
                 <MenuItem key={i} value={theme}>
                   {theme}
@@ -281,7 +289,8 @@ const RoomHeader = ({
               id="demo-simple-select"
               value={theme}
               label="Choose Theme"
-              onChange={(e) => setTheme(e.target.value)}>
+              onChange={(e) => setTheme(e.target.value)}
+            >
               {themes.map((theme, i) => (
                 <MenuItem key={i} value={theme}>
                   {theme}
@@ -295,7 +304,8 @@ const RoomHeader = ({
         <FormControl fullWidth>
           <InputLabel
             sx={{ color: themeMode === "dark" ? "white" : "" }}
-            id="demo-simple-select-label">
+            id="demo-simple-select-label"
+          >
             Choose Font Size
           </InputLabel>
           {themeMode === "dark" ? (
@@ -305,7 +315,8 @@ const RoomHeader = ({
               id="demo-simple-select"
               value={fontSize}
               label="Choose Font Size"
-              onChange={(e) => setFontSize(e.target.value)}>
+              onChange={(e) => setFontSize(e.target.value)}
+            >
               {fontSizes.map((size, i) => (
                 <MenuItem key={i} value={size}>
                   {size}
@@ -318,7 +329,8 @@ const RoomHeader = ({
               id="demo-simple-select"
               value={fontSize}
               label="Choose Font Size"
-              onChange={(e) => setFontSize(e.target.value)}>
+              onChange={(e) => setFontSize(e.target.value)}
+            >
               {fontSizes.map((size, i) => (
                 <MenuItem key={i} value={size}>
                   {size}
@@ -338,24 +350,28 @@ const RoomHeader = ({
           setSoundToggle={setSoundToggle}
         />
       </div>
-      <div className="flex space-x-5  md:justify-end">
-        <div className="md:w-[10rem] w-full">
-          <button
-            onClick={() => saveCode()}
-            disabled={saving || running}
-            className="rounded-md w-full dark:text-black text-white bg-gray-700 dark:bg-white py-3 hover:bg-black hover:dark:bg-gray-200 duration-150 transition-all">
-            {saving ? "Saving" : "Save"}
-          </button>
+      {!isWeb && (
+        <div className="flex space-x-5  md:justify-end">
+          <div className="md:w-[10rem] w-full">
+            <button
+              onClick={() => saveCode()}
+              disabled={saving || running}
+              className="rounded-md w-full dark:text-black text-white bg-gray-700 dark:bg-white py-3 hover:bg-black hover:dark:bg-gray-200 duration-150 transition-all"
+            >
+              {saving ? "Saving" : "Save"}
+            </button>
+          </div>
+          <div className="md:w-[10rem] w-full">
+            <button
+              onClick={() => runCode()}
+              disabled={running || saving}
+              className="rounded-md w-full dark:text-black text-white bg-gray-700 dark:bg-white py-3 hover:bg-black hover:dark:bg-gray-200 duration-150 transition-all"
+            >
+              {running ? "Running" : "Run"}
+            </button>
+          </div>
         </div>
-        <div className="md:w-[10rem] w-full">
-          <button
-            onClick={() => runCode()}
-            disabled={running || saving}
-            className="rounded-md w-full dark:text-black text-white bg-gray-700 dark:bg-white py-3 hover:bg-black hover:dark:bg-gray-200 duration-150 transition-all">
-            {running ? "Running" : "Run"}
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

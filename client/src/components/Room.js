@@ -23,6 +23,9 @@ import NotificationSound from "../Assets/Message_Alert.mp3";
 import JoinSound from "../Assets/Join_Alert.mp3";
 import LeaveSound from "../Assets/Leave_Alert.mp3";
 import { sound } from "../atoms/soundModal";
+import CodeEditor from "../utils/CodeEditor";
+import { initialHTML, initialCSS, initialJS } from "../utils/InitialValue";
+
 const Room = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,6 +40,17 @@ const Room = () => {
   const messageAlertPlayer = useRef(null);
   const joinAlertPlayer = useRef(null);
   const leaveAlertPlayer = useRef(null);
+  const [isWeb, setIsWeb] = useState(false);
+  const [htmlValue, setHtml] = useState(initialHTML);
+  const [cssValue, setCSS] = useState(initialCSS);
+  const [jsValue, setJs] = useState(initialJS);
+  const [Code, setCode] = useState(`
+<html>
+<body>${htmlValue}</body>
+<style>${cssValue}</style>
+<script>${jsValue}</script>
+</html>`);
+
   // Editor Options Modal
   const [language, setLanguage] = useRecoilState(langaugeState);
   const fontSize = useRecoilValue(fontSizeState);
@@ -316,60 +330,111 @@ const Room = () => {
             running={running}
             setSaving={setSaving}
             saving={saving}
+            isWeb={isWeb}
           />
           <Sidebar
             setOpenChat={setOpenChat}
             roomName={roomName}
             users={clients}
+            isWeb={isWeb}
+            setIsWeb={setIsWeb}
           />
           <hr />
-          <div className="flex lg:flex-row flex-col overflow-y-auto lg:overflow-y-hidden bg-[#434343]">
-            <div className="flex-[0.7] border-l-[2rem] md:border-[1rem] border-b-[2rem] md:border-l-[3rem] border-[#434343] lg:h-[80vh]">
-              <p className="text-white bg-[#434343] mx-auto">Code</p>
-              <Editor
-                type={"body"}
-                theme={theme}
-                width={"100%"}
-                language={language}
-                body={body}
-                handleBodyChange={handleBodyChange}
-                fontSize={fontSize}
-              />
+          {isWeb ? (
+            <div className="w-full h-screen flex flex-col">
+              <div className="flex-[0.5] flex flex-row w-full h-full grid-cols-3">
+                <div className="col-span-1">
+                  <CodeEditor
+                    displayName="HTML"
+                    language="html"
+                    value={htmlValue}
+                    setValue={setHtml}
+                    fontSize={fontSize}
+                    theme={theme}
+                  />
+                </div>
+                <div className="col-span-1">
+                  <CodeEditor
+                    displayName="CSS"
+                    language="css"
+                    value={cssValue}
+                    setValue={setCSS}
+                    fontSize={fontSize}
+                    theme={theme}
+                  />
+                </div>
+                <div className="col-span-1">
+                  <CodeEditor
+                    displayName="Javascript"
+                    language="javascript"
+                    value={jsValue}
+                    setValue={setJs}
+                    fontSize={fontSize}
+                    theme={theme}
+                  />
+                </div>
+              </div>
+              <div className="flex-[0.5] w-full h-full">
+                <iframe
+                  srcDoc={Code}
+                  title="output"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  sandbox="allow-scripts"
+                  loading="lazy"
+                ></iframe>
+              </div>
             </div>
-            <div className="flex-[0.3] flex flex-col border-l-[1rem] md:border-r-[1rem] md:border-b-[1rem] border-[#434343] h-[82vh]">
-              <div className=" border-l-[1rem] md:border-[1rem] border-[#434343] h-full ">
-                <p className="text-white bg-[#434343] mx-auto pl-[2rem] lg:pl-0">
-                  Input
-                </p>
+          ) : (
+            <div className="flex lg:flex-row flex-col overflow-y-auto lg:overflow-y-hidden bg-[#434343]">
+              <div className="flex-[0.7] border-l-[2rem] md:border-[1rem] border-b-[2rem] md:border-l-[3rem] border-[#434343] lg:h-[80vh]">
+                <p className="text-white bg-[#434343] mx-auto">Code</p>
                 <Editor
-                  type={"input"}
+                  type={"body"}
                   theme={theme}
-                  language={""}
-                  body={input}
-                  handleInputChange={handleInputChange}
                   width={"100%"}
-                  height={"34vh"}
+                  language={language}
+                  body={body}
+                  handleBodyChange={handleBodyChange}
                   fontSize={fontSize}
                 />
               </div>
-              <div className="border-l-[1rem] md:border-[1rem] md:border-t-0 border-[#434343] h-full">
-                <p className="text-white bg-[#434343] mx-auto pl-[2rem] lg:pl-0">
-                  Output
-                </p>
-                <Editor
-                  type={"output"}
-                  theme={theme}
-                  language={""}
-                  body={output}
-                  handleOutputChange={handleOutputChange}
-                  width={"100%"}
-                  readOnly={true}
-                  height={"34vh"}
-                  fontSize={fontSize}
-                />
+              <div className="flex-[0.3] flex flex-col border-l-[1rem] md:border-r-[1rem] md:border-b-[1rem] border-[#434343] h-[82vh]">
+                <div className=" border-l-[1rem] md:border-[1rem] border-[#434343] h-full ">
+                  <p className="text-white bg-[#434343] mx-auto pl-[2rem] lg:pl-0">
+                    Input
+                  </p>
+                  <Editor
+                    type={"input"}
+                    theme={theme}
+                    language={""}
+                    body={input}
+                    handleInputChange={handleInputChange}
+                    width={"100%"}
+                    height={"34vh"}
+                    fontSize={fontSize}
+                  />
+                </div>
+                <div className="border-l-[1rem] md:border-[1rem] md:border-t-0 border-[#434343] h-full">
+                  <p className="text-white bg-[#434343] mx-auto pl-[2rem] lg:pl-0">
+                    Output
+                  </p>
+                  <Editor
+                    type={"output"}
+                    theme={theme}
+                    language={""}
+                    body={output}
+                    handleOutputChange={handleOutputChange}
+                    width={"100%"}
+                    readOnly={true}
+                    height={"34vh"}
+                    fontSize={fontSize}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </>
