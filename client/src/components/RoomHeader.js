@@ -80,6 +80,9 @@ const RoomHeader = ({
   running,
   setSaving,
   saving,
+  htmlRef,
+  cssRef,
+  jsRef,
   isWeb,
 }) => {
   const { themeMode, setThemeMode } = React.useContext(ThemeContext);
@@ -104,24 +107,46 @@ const RoomHeader = ({
       roomId,
       socketId: socketRef.current.id,
     });
-    await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/api/save`, {
-        language: languageRef.current,
-        roomId: roomId,
-        body: bodyRef.current,
-        input: inputRef.current,
-      })
-      .then((res) => {
-        setSaving(false);
-        socketRef.current.emit(ACTIONS.SAVED, {
-          roomId,
+
+    if (isWeb === false) {
+      await axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/api/save`, {
+          language: languageRef.current,
+          roomId: roomId,
+          body: bodyRef.current,
+          input: inputRef.current,
+        })
+        .then((res) => {
+          setSaving(false);
+          socketRef.current.emit(ACTIONS.SAVED, {
+            roomId,
+          });
+          toast.success("Code saved successfully");
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Error in saving");
         });
-        toast.success("Code saved successfully");
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Error in saving");
-      });
+    } else {
+      await axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/api/saveweb`, {
+          html: htmlRef.current,
+          roomId: roomId,
+          css: cssRef.current,
+          js: jsRef.current,
+        })
+        .then((res) => {
+          setSaving(false);
+          socketRef.current.emit(ACTIONS.SAVED, {
+            roomId,
+          });
+          toast.success("Code saved successfully");
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Error in saving");
+        });
+    }
   };
 
   useEffect(() => {
@@ -350,17 +375,18 @@ const RoomHeader = ({
           setSoundToggle={setSoundToggle}
         />
       </div>
-      {!isWeb && (
-        <div className="flex space-x-5  md:justify-end">
-          <div className="md:w-[10rem] w-full">
-            <button
-              onClick={() => saveCode()}
-              disabled={saving || running}
-              className="rounded-md w-full dark:text-black text-white bg-gray-700 dark:bg-white py-3 hover:bg-black hover:dark:bg-gray-200 duration-150 transition-all"
-            >
-              {saving ? "Saving" : "Save"}
-            </button>
-          </div>
+
+      <div className="flex space-x-5  md:justify-end">
+        <div className="md:w-[10rem] w-full">
+          <button
+            onClick={() => saveCode()}
+            disabled={saving || running}
+            className="rounded-md w-full dark:text-black text-white bg-gray-700 dark:bg-white py-3 hover:bg-black hover:dark:bg-gray-200 duration-150 transition-all"
+          >
+            {saving ? "Saving" : "Save"}
+          </button>
+        </div>
+        {!isWeb && (
           <div className="md:w-[10rem] w-full">
             <button
               onClick={() => runCode()}
@@ -370,8 +396,8 @@ const RoomHeader = ({
               {running ? "Running" : "Run"}
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

@@ -14,6 +14,13 @@ const roomSchema = new Schema({
     type: String,
     default: "",
   },
+  html: {
+    type: String,
+  },
+  css: { type: String },
+  js: {
+    type: String,
+  },
   language: {
     type: String,
     default: "python",

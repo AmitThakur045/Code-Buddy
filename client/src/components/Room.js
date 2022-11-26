@@ -66,12 +66,20 @@ const Room = () => {
   const inputRef = useRef(null);
   const outputRef = useRef(null);
   const messagesRef = useRef(null);
+  const htmlRef = useRef(null);
+  const cssRef = useRef(null);
+  const jsRef = useRef(null);
+
   // Ref Assignings
   languageRef.current = language;
   bodyRef.current = body;
   inputRef.current = input;
   outputRef.current = output;
   messagesRef.current = messages;
+  htmlRef.current = htmlValue;
+  cssRef.current = cssValue;
+  jsRef.current = jsValue;
+
   // Socket Connection and Initialization
   const socketRef = useRef(null);
   const [clients, setClients] = useState([]);
@@ -149,6 +157,9 @@ const Room = () => {
                 output: outputRef.current,
                 language: languageRef.current,
                 messages: messagesRef.current,
+                html: htmlRef.current,
+                css: cssRef.current,
+                js: jsRef.current,
                 socketId,
               });
             }
@@ -170,6 +181,22 @@ const Room = () => {
           outputRef.current = output;
           setOutput(output);
         });
+        // Listening for HTML change event
+        socketRef.current.on(ACTIONS.HTML_CHANGE, ({ html }) => {
+          htmlRef.current = html;
+          setHtml(html);
+        });
+        // Listening for CSS change event
+        socketRef.current.on(ACTIONS.CSS_CHANGE, ({ css }) => {
+          cssRef.current = css;
+          setCSS(css);
+        });
+        // Listening for JS change event
+        socketRef.current.on(ACTIONS.JS_CHANGE, ({ js }) => {
+          jsRef.current = js;
+          setJs(js);
+        });
+
         // Listening for Language change event
         socketRef.current.on(ACTIONS.LANGUAGE_CHANGE, ({ language }) => {
           languageRef.current = language;
@@ -284,6 +311,49 @@ const Room = () => {
     }
   }, [messages]);
 
+  // web editor
+  // html
+  const handleHtmlChange = (value) => {
+    socketRef.current.emit(ACTIONS.HTML_CHANGE, {
+      roomId,
+      html: value,
+    });
+    htmlRef.current = value;
+    setHtml(value);
+  };
+
+  // css
+  const handleCssChange = (value) => {
+    socketRef.current.emit(ACTIONS.CSS_CHANGE, {
+      roomId,
+      css: value,
+    });
+    cssRef.current = value;
+    setCSS(value);
+  };
+
+  // js
+  const handleJsChange = (value) => {
+    socketRef.current.emit(ACTIONS.JS_CHANGE, {
+      roomId,
+      js: value,
+    });
+    jsRef.current = value;
+    setJs(value);
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCode(`
+      <html>
+      <body>${htmlValue}</body>
+      <style>${cssValue}</style>
+      <script>${jsValue}</script>
+      </html>`);
+    }, 250);
+    return () => clearTimeout(timeout);
+  }, [htmlValue, cssValue, jsValue]);
+
   return (
     <>
       {loading ? (
@@ -330,6 +400,9 @@ const Room = () => {
             running={running}
             setSaving={setSaving}
             saving={saving}
+            htmlRef={htmlRef}
+            jsRef={jsRef}
+            cssRef={cssRef}
             isWeb={isWeb}
           />
           <Sidebar
@@ -351,6 +424,7 @@ const Room = () => {
                     setValue={setHtml}
                     fontSize={fontSize}
                     theme={theme}
+                    handleBodyChange={handleHtmlChange}
                   />
                 </div>
                 <div className="col-span-1">
@@ -361,6 +435,7 @@ const Room = () => {
                     setValue={setCSS}
                     fontSize={fontSize}
                     theme={theme}
+                    handleBodyChange={handleCssChange}
                   />
                 </div>
                 <div className="col-span-1">
@@ -371,6 +446,7 @@ const Room = () => {
                     setValue={setJs}
                     fontSize={fontSize}
                     theme={theme}
+                    handleBodyChange={handleJsChange}
                   />
                 </div>
               </div>

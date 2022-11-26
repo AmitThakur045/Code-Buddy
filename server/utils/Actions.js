@@ -24,4 +24,5 @@ export const ACTIONS = {
   HTML_CHANGE: "html-change",
   CSS_CHANGE: "css-change",
   JS_CHANGE: "js-change",
+  CODE_CHANGE: "code-change",
 };

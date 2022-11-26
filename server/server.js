@@ -54,7 +54,6 @@ function getAllConnectedClients(roomId) {
 }
 
 // Socket Connection
-
 io.on("connection", (socket) => {
   console.log("socket connected", socket.id);
   // Socket Events
@@ -90,6 +89,22 @@ io.on("connection", (socket) => {
     console.log("Output Change", output);
     socket.to(roomId).emit(ACTIONS.OUTPUT_CHANGE, { output });
   });
+  // Html change event
+  socket.on(ACTIONS.HTML_CHANGE, ({ roomId, html }) => {
+    console.log("Html Change", html);
+    socket.to(roomId).emit(ACTIONS.HTML_CHANGE, { html });
+  });
+  // Css Change event
+  socket.on(ACTIONS.CSS_CHANGE, ({ roomId, css }) => {
+    console.log("Css Change", css);
+    socket.to(roomId).emit(ACTIONS.CSS_CHANGE, { css });
+  });
+  // js change event
+  socket.on(ACTIONS.JS_CHANGE, ({ roomId, js }) => {
+    console.log("Javascript Change", js);
+    socket.to(roomId).emit(ACTIONS.JS_CHANGE, { js });
+  });
+
   // Language Change Event
   socket.on(ACTIONS.LANGUAGE_CHANGE, ({ roomId, language }) => {
     console.log("Language Change", language);
@@ -99,12 +114,15 @@ io.on("connection", (socket) => {
   // Sync Code Event
   socket.on(
     ACTIONS.SYNC_CODE,
-    ({ socketId, body, input, output, language, messages }) => {
+    ({ socketId, body, input, output, language, messages, html, css, js }) => {
       console.log(
         "Sync Change",
         body,
         input,
         output,
+        html,
+        css,
+        js,
         language,
         socketId,
         messages
@@ -112,6 +130,9 @@ io.on("connection", (socket) => {
       io.to(socketId).emit(ACTIONS.BODY_CHANGE, { body });
       io.to(socketId).emit(ACTIONS.INPUT_CHANGE, { input });
       io.to(socketId).emit(ACTIONS.OUTPUT_CHANGE, { output });
+      io.to(socketId).emit(ACTIONS.HTML_CHANGE, { html });
+      io.to(socketId).emit(ACTIONS.CSS_CHANGE, { css });
+      io.to(socketId).emit(ACTIONS.JS_CHANGE, { js });
       io.to(socketId).emit(ACTIONS.LANGUAGE_CHANGE, { language });
       io.to(socketId).emit(ACTIONS.SYNC_MESSAGE, { messages });
     }

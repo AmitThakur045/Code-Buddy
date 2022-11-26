@@ -19,7 +19,15 @@ import "ace-builds/src-noconflict/theme-ambiance";
 import "ace-builds/src-noconflict/theme-solarized_light";
 
 export default function CodeEditor(prop) {
-  const { value, language, setValue, displayName, theme, fontSize } = prop;
+  const {
+    value,
+    language,
+    setValue,
+    displayName,
+    theme,
+    fontSize,
+    handleBodyChange,
+  } = prop;
   const [width, setWidth] = useState(window.innerWidth / 3);
 
   function handleSizeChange() {
@@ -30,16 +38,13 @@ export default function CodeEditor(prop) {
     window.addEventListener("resize", handleSizeChange);
   }, []);
 
-  function handleEditorChange(value, event) {
-    setValue(value);
-  }
   return (
     <div className="h-full" style={{ width: width }}>
       <h3 className="w-full text-white text-center">{displayName}</h3>
       <AceEditor
         mode={language}
         theme={theme}
-        onChange={handleEditorChange}
+        onChange={handleBodyChange}
         value={value}
         width="auto"
         height="50vh"
